@@ -103,6 +103,55 @@ fn main() {
 
     get_squares(333);
     get_cubes(333);
+
+    // closures
+    |a: i32, b: i32| -> i32 {
+        println!("sum {}", a + b);
+        // return a + b;
+        a + b
+    };
+
+    let closure_can_be_a_variable = |a: i32, b: i32| println!("sum {}", a + b);
+    closure_can_be_a_variable(3, 2);
+
+    let sqr = |a: i32| a * a;
+    apply(sqr, 5);
+    apply(divide_by_2, 10);
+
+    // Higher order functions
+
+    // bloated code with non HOF
+    let limit = 500;
+    let mut sum = 0;
+    for i in 0.. {
+        let isq = i * i;
+        if isq > limit { break; } else {
+            if is_even(isq) {
+                sum += isq;
+            }
+        }
+    }
+    println!("Sum without HOF is {}", sum);
+
+    // With HOF
+    let sum2 = (0..).map(|x: i32| x * x)
+        .take_while(|&x| x <= limit)
+        .filter(|x| is_even(*x))
+        .fold(0, |sum, x| sum + x);
+
+    println!("Sum with HOF is {}", sum2);
+}
+
+fn is_even(x: i32) -> bool {
+    x % 2 == 0
+}
+
+fn divide_by_2(a: i32) -> i32 {
+    a / 2
+}
+
+fn apply(f: fn(i32) -> i32, a: i32) {
+    println!("Res {}", f(a));
 }
 
 fn get_squares(limit: i32) {
@@ -115,7 +164,7 @@ fn get_squares(limit: i32) {
 
 fn get_cubes(limit: i32) {
     let mut x = 1;
-    loop {
+    loop { // while true
         println!("{0} * {0} * {0} = {1}", x, x * x * x);
         x += 1;
         if x * x * x > limit {
