@@ -2,6 +2,36 @@ use crate::Colors::Red;
 use crate::EnumWithTypes::Name;
 use crate::Suit::{Diamond, Heart};
 
+
+macro_rules! my_macro {
+    () => (println!("first macro"))
+}
+
+macro_rules! name {
+    ($name: expr) => ( println!("hey {}", $name) )
+}
+
+macro_rules! name_name {
+    ($name: expr, $name2: expr) => ( println!("hey {} and {}", $name, $name2) )
+}
+
+macro_rules! name1 {
+    ($($name: expr),*) => ( $(println!("hey {}", $name);)* )
+}
+
+macro_rules! xy {
+    (x => $x: expr) => ( println!("X is {}", $x) );
+    (y => $x: expr) => ( println!("Y is {}", $x) );
+}
+
+macro_rules! build_fn {
+    ($fn_name: ident) => {
+        fn $fn_name() {
+            println!("{:?} was called", stringify!($fn_name))
+        }
+    }
+}
+
 fn main() {
     println!("Hello, world!");
 
@@ -140,6 +170,15 @@ fn main() {
         .fold(0, |sum, x| sum + x);
 
     println!("Sum with HOF is {}", sum2);
+
+    // macros
+    my_macro!();
+    name!("James");
+    name1!("Man", "Mannen", "Kvinna", "Kvinnan");
+    xy!(x => 5);
+    name_name!("a", "b");
+    build_fn!(sd);
+    sd()
 }
 
 fn is_even(x: i32) -> bool {
